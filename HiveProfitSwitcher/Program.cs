@@ -1,4 +1,5 @@
-﻿using Ionic.Zip;
+﻿using HtmlAgilityPack;
+using Ionic.Zip;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -9,6 +10,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -127,6 +129,23 @@ namespace HiveProfitSwitcher
             {
                 if (!configuredCoins.ContainsKey(enabledCoin.CoinTicker))
                 {
+                    //Only mine ETH until merge TTD is reached
+                    if (enabledCoin.CoinTicker == "ETH")
+                    {
+                        var ttd = BigInteger.Parse("58750000000000000000000");
+                        string url = "https://wenmerge.com/";
+                        var web = new HtmlAgilityPack.HtmlWeb();
+                        HtmlDocument doc = web.Load(url);
+                        var currentTotalDifficulty = doc?.DocumentNode?.SelectNodes("//*[@class=\"wpb_wrapper\"]")?[16]?.SelectNodes("//*[@class=\"uvc-sub-heading ult-responsive\"]")?[4]?.InnerText?.ToString();
+                        if (currentTotalDifficulty != null)
+                        {
+                            if (BigInteger.Parse(currentTotalDifficulty) >= ttd)
+                            {
+                                continue;
+                            }
+                        }
+                        
+                    }
                     configuredCoins.Add(enabledCoin.CoinTicker, enabledCoin.FlightSheetName);
                 }
             }
