@@ -8,5 +8,5 @@ sudo apt install mono-complete -y
 cd /home/user
 wget https://github.com/TheRetroMike/HiveOSProfitSwitcher/releases/latest/download/HiveProfitSwitcher.zip
 unzip HiveProfitSwitcher.zip -d /usr/profit-switcher
-printf "\n0 * * * * mono /usr/profit-switcher/HiveProfitSwitcher.exe\n" >> /hive/etc/crontab.root
+printf "\n0/15 * * * * mono /usr/profit-switcher/HiveProfitSwitcher.exe\n" >> /hive/etc/crontab.root
 printf "..................\nHive Profit Switcher has been installed, but must be configured for you instance. \nPlease run the following command to setup the config file, save it, and then make sure to reboot the rig\nnano /usr/profit-switcher/HiveProfitSwitcher.exe.config\n..................\n"
