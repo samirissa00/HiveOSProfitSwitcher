@@ -34,5 +34,44 @@ namespace HiveProfitSwitcher
                 base["flightSheetName"] = value;
             }
         }
+
+        [ConfigurationProperty("msHashrate", IsKey = false, IsRequired = true)]
+        public string MsHashrate
+        {
+            get
+            {
+                return (string)base["msHashrate"];
+            }
+            set
+            {
+                base["msHashrate"] = value;
+            }
+        }
+
+        [ConfigurationProperty("msHashUnit", IsKey = false, IsRequired = true)]
+        public string MsHashUnit
+        {
+            get
+            {
+                return (string)base["msHashUnit"];
+            }
+            set
+            {
+                base["msHashUnit"] = value;
+            }
+        }
+
+        [ConfigurationProperty("msPower", IsKey = false, IsRequired = true)]
+        public string MsPower
+        {
+            get
+            {
+                return (string)base["msPower"];
+            }
+            set
+            {
+                base["msPower"] = value;
+            }
+        }
     }
 }
