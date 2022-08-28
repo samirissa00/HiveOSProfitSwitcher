@@ -146,7 +146,7 @@ namespace HiveProfitSwitcher
             CultureInfo us = new CultureInfo("en-US");
             string currentFlighSheetId = item?.flight_sheet?.id?.Value?.ToString();
             string workerName = item?.name?.Value?.ToString();
-            var powerPrice = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(worker.WTMEndpoint)).Query).Get("factor[cost]");
+            
             var btcPrice = 0.01;
             var coinDeskApiUrl = ConfigurationManager.AppSettings["CoinDeskApi"] ?? "https://api.coindesk.com/v1/bpi/currentprice.json";
 
@@ -193,8 +193,12 @@ namespace HiveProfitSwitcher
             
             string minerStat =  ConfigurationManager.AppSettings["MinerStat"] ?? "false";
             var minerStatBoolean = Convert.ToBoolean(minerStat);
+            var powerPrice = "0.0";
             string urlMinerStat = "";
             if (minerStatBoolean) {
+
+                powerPrice = ConfigurationManager.AppSettings["MinerStatPowerPrice"] ?? "0.1" ;
+
                 urlMinerStat = MinestatUrlBuild(worker);
                 RestClient clientMinerstat = new RestClient(urlMinerStat);
                 RestRequest requestMinerstat = new RestRequest("");
@@ -236,7 +240,7 @@ namespace HiveProfitSwitcher
                                     case "EH": calcFactor = 1000000000000000000; break;
                                 }
                                                                
-                                var dailyPowerCost = 24 * ((Convert.ToDouble(powerConsumption) / 1000) * Convert.ToDouble(powerPrice));
+                                var dailyPowerCost = 24 * ((Convert.ToDouble(powerConsumption, us.NumberFormat) / 1000) * Convert.ToDouble(powerPrice, us.NumberFormat));
                                 //var dailyRevenue = Convert.ToDouble(btcRevenue) * Convert.ToDouble(btcPrice);
                                 //var dailyProfit = dailyRevenue - dailyPowerCost;
 
@@ -253,7 +257,7 @@ namespace HiveProfitSwitcher
             }
             else
             {
-
+                powerPrice = HttpUtility.ParseQueryString(new Uri(HttpUtility.UrlDecode(worker.WTMEndpoint)).Query).Get("factor[cost]");
                 RestClient client = new RestClient(worker.WTMEndpoint);
                 RestRequest request = new RestRequest("");
                 var response = client.Get(request);
@@ -356,8 +360,8 @@ namespace HiveProfitSwitcher
                             default:
                                 break;
                         }
-                        var dailyPowerCost = 24 * ((Convert.ToDouble(powerConsumption) / 1000) * Convert.ToDouble(powerPrice));
-                        var dailyRevenue = Convert.ToDouble(btcRevenue) * Convert.ToDouble(btcPrice);
+                        var dailyPowerCost = 24 * ((Convert.ToDouble(powerConsumption, us.NumberFormat) / 1000) * Convert.ToDouble(powerPrice, us.NumberFormat));
+                        var dailyRevenue = Convert.ToDouble(btcRevenue, us.NumberFormat) * Convert.ToDouble(btcPrice, us.NumberFormat);
                         var dailyProfit = dailyRevenue - dailyPowerCost;
                         coins.Add(coin?.First?.tag?.Value, dailyProfit);
                     }
