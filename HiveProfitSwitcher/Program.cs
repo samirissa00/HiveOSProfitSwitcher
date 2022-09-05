@@ -208,6 +208,8 @@ namespace HiveProfitSwitcher
 
                 foreach (ConfiguredCoinElement enabledCoin in worker.EnabledCoins)
                 {
+                    DateTime aDate = DateTime.Now;
+                    Console.WriteLine(aDate.ToString("dd/MM/yyyy HH:mm:ss"));
                     foreach (var coin in minerStatResponseContent)
                     {
                         if (enabledCoin.CoinTicker == coin?.coin?.Value)
