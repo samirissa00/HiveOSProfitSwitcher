@@ -55,7 +55,7 @@ namespace HiveProfitSwitcher
                         }
                     }
                     RestClient client = new RestClient("https://api2.hiveos.farm/api/v2");
-                    RestRequest request = new RestRequest(String.Format("/farms/{0}/workers", farmId));
+                    RestRequest request = new RestRequest(String.Format("/farms/{0}/workers/preview", farmId));
                     request.AddHeader("Authorization", "Bearer " + hiveApiKey);
                     var response = client.Get(request);
                     dynamic responseContent = JsonConvert.DeserializeObject(response.Content);
